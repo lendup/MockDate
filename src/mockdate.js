@@ -7,16 +7,18 @@
 
   var _Date = Date
     , now   = null
+    , start = null
     ;
 
   function MockDate(y, m, d, h, M, s, ms) {
     var date;
+    var startDate;
 
     switch (arguments.length) {
 
       case 0:
         if (now !== null) {
-          date = new _Date(now);
+          date = new _Date(now + (_Date.now() - start));
         } else {
           date = new _Date();
         }
@@ -42,7 +44,7 @@
   MockDate.UTC = _Date.UTC;
 
   MockDate.now = function() {
-    return new MockDate().valueOf();
+    return new MockDate().valueOf() + (_Date.now() - start);
   };
 
   MockDate.parse = function(dateString) {
@@ -63,6 +65,7 @@
     }
 
     now = new Date(date).valueOf();
+    start = _Date.now()
   }
 
   function reset() {
